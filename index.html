@@ -319,14 +319,6 @@
     .add-order-btn:hover { border-color: var(--red); color: var(--red); }
 
     /* ── STOCK PAGE ──────────────────────────────────────────────── */
-    .stock-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .search-box {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px 14px; flex: 1; min-width: 200px; max-width: 340px;
-    }
-    .search-box svg { width: 14px; height: 14px; fill: var(--muted); flex-shrink: 0; }
-    .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 0.85rem; width: 100%; }
     .btn-primary {
       background: var(--red); color: #fff; border: none; border-radius: 8px;
       padding: 9px 18px; font-family: 'Oswald', sans-serif; font-size: 0.82rem;
@@ -334,37 +326,121 @@
       transition: background 0.15s;
     }
     .btn-primary:hover { background: var(--red-dark); }
-
-    .stock-table { width: 100%; border-collapse: collapse; }
-    .stock-table th {
-      text-align: left; padding: 10px 14px;
-      font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
-      border-bottom: 1px solid var(--border); font-weight: 500;
-    }
-    .stock-table td { padding: 12px 14px; font-size: 0.84rem; border-bottom: 1px solid rgba(42,42,42,0.5); }
-    .stock-table tr:hover td { background: var(--surface2); }
-    .stock-name { font-weight: 500; }
-    .stock-cat {
-      font-size: 0.68rem; font-family: 'Oswald', sans-serif; letter-spacing: 1px;
-      padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
-    }
-    .cat-viande   { background: rgba(232,18,18,0.15);   color: var(--red);    }
-    .cat-legume   { background: rgba(34,197,94,0.15);   color: var(--green);  }
-    .cat-boisson  { background: rgba(59,130,246,0.15);  color: var(--blue);   }
-    .cat-pain     { background: rgba(245,158,11,0.15);  color: var(--orange); }
-    .cat-sauce    { background: rgba(20,184,166,0.15);  color: var(--teal);   }
-    .cat-autre    { background: rgba(136,136,136,0.15); color: var(--muted);  }
-    .qty-bar-wrap { display: flex; align-items: center; gap: 8px; }
-    .qty-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; max-width: 80px; }
-    .qty-bar-fill { height: 5px; border-radius: 3px; }
-    .qty-num { font-family: 'Oswald', sans-serif; font-size: 0.82rem; min-width: 30px; }
-    .stock-alert { color: var(--red); font-size: 0.7rem; font-weight: 600; }
     .btn-sm {
       background: var(--surface3); border: 1px solid var(--border); border-radius: 5px;
       padding: 4px 10px; font-size: 0.75rem; color: var(--text); cursor: pointer; font-family: 'Oswald', sans-serif;
       letter-spacing: 0.5px; transition: all 0.15s;
     }
     .btn-sm:hover { border-color: var(--red); color: var(--red); }
+    .search-box {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 14px; flex: 1; min-width: 200px; max-width: 300px;
+    }
+    .search-box svg { width: 14px; height: 14px; fill: var(--muted); flex-shrink: 0; }
+    .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 0.85rem; width: 100%; }
+
+    /* KPI strip */
+    .stock-kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 22px; }
+    .skpi {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 18px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .skpi-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
+    .skpi-val   { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; }
+    .skpi-sub   { font-size: 0.7rem; color: var(--muted); }
+    .skpi.alert-kpi { border-color: rgba(232,18,18,0.35); }
+    .skpi.alert-kpi .skpi-val { color: var(--red); }
+
+    /* Tabs */
+    .stock-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .stock-tab {
+      padding: 6px 14px; border-radius: 7px; font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; border: 1px solid var(--border); color: var(--muted); transition: all 0.15s;
+    }
+    .stock-tab:hover { border-color: var(--red); color: var(--text); }
+    .stock-tab.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+    /* Table */
+    .stock-table { width: 100%; border-collapse: collapse; }
+    .stock-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+      border-bottom: 1px solid var(--border); font-weight: 500; white-space: nowrap;
+    }
+    .stock-table td { padding: 11px 14px; font-size: 0.83rem; border-bottom: 1px solid rgba(42,42,42,0.5); vertical-align: middle; }
+    .stock-table tr:hover td { background: var(--surface2); }
+    .stock-name { font-weight: 500; }
+    .stock-supplier { font-size: 0.72rem; color: var(--muted); }
+    .stock-cat {
+      font-size: 0.65rem; font-family: 'Oswald', sans-serif; letter-spacing: 1px;
+      padding: 2px 8px; border-radius: 4px; text-transform: uppercase; white-space: nowrap;
+    }
+    .cat-viande  { background: rgba(232,18,18,0.15);   color: var(--red);    }
+    .cat-legume  { background: rgba(34,197,94,0.15);   color: var(--green);  }
+    .cat-boisson { background: rgba(59,130,246,0.15);  color: var(--blue);   }
+    .cat-pain    { background: rgba(245,158,11,0.15);  color: var(--orange); }
+    .cat-sauce   { background: rgba(20,184,166,0.15);  color: var(--teal);   }
+    .cat-autre   { background: rgba(136,136,136,0.15); color: var(--muted);  }
+
+    /* Stock level bar */
+    .slevel { display: flex; align-items: center; gap: 8px; }
+    .slevel-bar { width: 70px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .slevel-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+    .slevel-num { font-family: 'Oswald', sans-serif; font-size: 0.82rem; min-width: 28px; }
+    .slevel-unit { font-size: 0.7rem; color: var(--muted); }
+
+    /* Status pill */
+    .sstatus {
+      font-size: 0.65rem; font-family: 'Oswald', sans-serif; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .ss-ok      { background: rgba(34,197,94,0.12);  color: var(--green);  }
+    .ss-low     { background: rgba(245,158,11,0.12); color: var(--orange); }
+    .ss-critic  { background: rgba(232,18,18,0.12);  color: var(--red);    }
+    .ss-rupture { background: rgba(136,136,136,0.1); color: var(--muted);  }
+
+    /* Inline qty adjust */
+    .qty-adj { display: flex; align-items: center; gap: 5px; }
+    .qty-adj button {
+      width: 22px; height: 22px; border-radius: 4px;
+      background: var(--surface3); border: 1px solid var(--border);
+      color: var(--text); font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; line-height: 1;
+    }
+    .qty-adj button:hover { border-color: var(--red); color: var(--red); }
+    .qty-adj span { font-family: 'Oswald', sans-serif; font-size: 0.9rem; min-width: 26px; text-align: center; }
+
+    /* DLC warning */
+    .dlc-ok   { font-size: 0.75rem; color: var(--muted); }
+    .dlc-warn { font-size: 0.75rem; color: var(--orange); font-weight: 600; }
+    .dlc-exp  { font-size: 0.75rem; color: var(--red); font-weight: 700; }
+
+    /* Mouvement log */
+    .mvt-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+    .mvt-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; background: var(--surface2); border-radius: 8px;
+      font-size: 0.8rem;
+    }
+    .mvt-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .mvt-in   { background: rgba(34,197,94,0.15); }
+    .mvt-out  { background: rgba(232,18,18,0.15); }
+    .mvt-adj  { background: rgba(245,158,11,0.15); }
+    .mvt-info { flex: 1; }
+    .mvt-name { font-weight: 500; }
+    .mvt-detail { font-size: 0.72rem; color: var(--muted); }
+    .mvt-delta { font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 700; }
+    .mvt-delta.pos { color: var(--green); }
+    .mvt-delta.neg { color: var(--red); }
+    .mvt-time { font-size: 0.68rem; color: var(--muted); }
+
+    /* Fifo badge */
+    .fifo-badge {
+      font-size: 0.6rem; font-family: 'Oswald', sans-serif; letter-spacing: 1px;
+      padding: 1px 5px; border-radius: 3px; border: 1px solid var(--teal); color: var(--teal); text-transform: uppercase;
+    }
 
     /* ── MENU PAGE ───────────────────────────────────────────────── */
     .menu-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -669,28 +745,54 @@
 
     <!-- ══ STOCK PAGE ═════════════════════════════════════════════ -->
     <div class="page" id="page-stock">
-      <div class="stock-toolbar">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <input type="text" placeholder="Rechercher un article..." id="stock-search" oninput="filterStock()">
+
+      <!-- KPIs -->
+      <div class="stock-kpis" id="stock-kpis"></div>
+
+      <!-- Toolbar -->
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <div class="stock-tabs" id="stock-tabs"></div>
+        <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" placeholder="Rechercher..." id="stock-search" oninput="renderStock()">
+          </div>
+          <button class="btn-primary" onclick="openStockModal()">+ Ajouter article</button>
+          <button class="btn-sm" onclick="doInventory()" style="padding:8px 14px">📋 Inventaire</button>
         </div>
-        <button class="btn-primary" onclick="openStockModal()">+ Ajouter article</button>
       </div>
-      <div class="card" style="padding:0;overflow:hidden">
-        <table class="stock-table" id="stock-table">
+
+      <!-- Tableau principal -->
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
+        <table class="stock-table">
           <thead>
             <tr>
-              <th>Article</th>
+              <th>Article / Fournisseur</th>
               <th>Catégorie</th>
-              <th>Stock</th>
-              <th>Seuil alerte</th>
-              <th>Unité</th>
+              <th>Niveau de stock</th>
+              <th>Prix unit.</th>
+              <th>Valeur stock</th>
+              <th>DLC / Commande</th>
               <th>Statut</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="stock-tbody"></tbody>
         </table>
+      </div>
+
+      <!-- Bas de page : mouvements + food cost -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-title">Mouvements récents</div>
+          <div class="card-sub" style="margin-bottom:12px">Entrées, sorties, ajustements</div>
+          <div class="mvt-list" id="mvt-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Indicateurs de gestion</div>
+          <div class="card-sub" style="margin-bottom:16px">KPIs recommandés par Zenchef</div>
+          <div id="kpi-detail"></div>
+        </div>
       </div>
     </div>
 
@@ -728,25 +830,49 @@
 
 <!-- MODAL STOCK -->
 <div class="modal-backdrop" id="modal-stock">
-  <div class="modal">
+  <div class="modal" style="width:460px">
     <h3 id="stock-modal-title">Ajouter Article</h3>
-    <label>Nom de l'article</label>
-    <input type="text" id="s-name" placeholder="Ex: Viande agneau">
-    <label>Catégorie</label>
-    <select id="s-cat">
-      <option value="viande">Viande</option>
-      <option value="legume">Légume</option>
-      <option value="pain">Pain / Galette</option>
-      <option value="sauce">Sauce</option>
-      <option value="boisson">Boisson</option>
-      <option value="autre">Autre</option>
-    </select>
-    <label>Quantité actuelle</label>
-    <input type="number" id="s-qty" placeholder="Ex: 10" min="0">
-    <label>Seuil d'alerte</label>
-    <input type="number" id="s-alert" placeholder="Ex: 3" min="0">
-    <label>Unité</label>
-    <input type="text" id="s-unit" placeholder="Ex: kg, pcs, L">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 12px">
+      <div style="grid-column:1/-1">
+        <label>Nom de l'article</label>
+        <input type="text" id="s-name" placeholder="Ex: Viande agneau (broche)">
+      </div>
+      <div>
+        <label>Catégorie</label>
+        <select id="s-cat">
+          <option value="viande">Viande</option>
+          <option value="legume">Légume</option>
+          <option value="pain">Pain / Galette</option>
+          <option value="sauce">Sauce</option>
+          <option value="boisson">Boisson</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div>
+        <label>Fournisseur</label>
+        <input type="text" id="s-supplier" placeholder="Ex: Metro Cash & Carry">
+      </div>
+      <div>
+        <label>Quantité actuelle</label>
+        <input type="number" id="s-qty" placeholder="Ex: 10" min="0" step="0.5">
+      </div>
+      <div>
+        <label>Unité</label>
+        <input type="text" id="s-unit" placeholder="kg, pcs, L, sac...">
+      </div>
+      <div>
+        <label>Seuil d'alerte</label>
+        <input type="number" id="s-alert" placeholder="Ex: 3" min="0" step="0.5">
+      </div>
+      <div>
+        <label>Prix unitaire (€)</label>
+        <input type="number" id="s-prixu" placeholder="Ex: 18.50" min="0" step="0.01">
+      </div>
+      <div style="grid-column:1/-1">
+        <label>Date limite de consommation (DLC)</label>
+        <input type="date" id="s-dlc">
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('modal-stock')">Annuler</button>
       <button class="btn-confirm" onclick="saveStockItem()">Enregistrer</button>
@@ -1042,93 +1168,276 @@ function addLocalOrder() {
 // ═══════════════════════════════════════════════════════════════
 // STOCK
 // ═══════════════════════════════════════════════════════════════
-let stockItems = [
-  { id:1, name:'Viande agneau (broche)',  cat:'viande',  qty:8,  alert:3, unit:'kg'  },
-  { id:2, name:'Viande poulet',           cat:'viande',  qty:6,  alert:3, unit:'kg'  },
-  { id:3, name:'Pain kebab',              cat:'pain',    qty:45, alert:10,unit:'pcs' },
-  { id:4, name:'Galette durum',           cat:'pain',    qty:30, alert:8, unit:'pcs' },
-  { id:5, name:'Tomate',                  cat:'legume',  qty:4,  alert:2, unit:'kg'  },
-  { id:6, name:'Salade iceberg',          cat:'legume',  qty:2,  alert:3, unit:'kg'  },
-  { id:7, name:'Oignon',                  cat:'legume',  qty:5,  alert:2, unit:'kg'  },
-  { id:8, name:'Sauce blanche',           cat:'sauce',   qty:3,  alert:2, unit:'L'   },
-  { id:9, name:'Sauce piquante',          cat:'sauce',   qty:4,  alert:2, unit:'L'   },
-  { id:10,name:'Coca-Cola',               cat:'boisson', qty:24, alert:6, unit:'pcs' },
-  { id:11,name:'Eau 50cl',                cat:'boisson', qty:18, alert:6, unit:'pcs' },
-  { id:12,name:'Frites (sac 10kg)',        cat:'autre',   qty:2,  alert:2, unit:'sac' },
-];
-let stockIdCtr = 13;
+// ── STOCK DATA ────────────────────────────────────────────────
+const today = new Date();
+const d = (plus) => { const x = new Date(today); x.setDate(x.getDate()+plus); return x.toISOString().split('T')[0]; };
 
-const CAT_LABELS = { viande:'Viande', legume:'Légume', pain:'Pain', sauce:'Sauce', boisson:'Boisson', autre:'Autre' };
+let stockItems = [
+  { id:1,  name:'Viande agneau (broche)', supplier:'Boucherie Halal Rungis', cat:'viande',  qty:8,   alert:3,  unit:'kg',   prixU:18.50, dlc: d(3),  fifo:true  },
+  { id:2,  name:'Viande poulet mariné',   supplier:'Boucherie Halal Rungis', cat:'viande',  qty:6,   alert:3,  unit:'kg',   prixU:8.90,  dlc: d(2),  fifo:true  },
+  { id:3,  name:'Sucuk (saucisse turque)',supplier:'Import Turkish Food',     cat:'viande',  qty:4,   alert:2,  unit:'kg',   prixU:12.00, dlc: d(10), fifo:false },
+  { id:4,  name:'Pain kebab',             supplier:'Boulangerie Orient',      cat:'pain',    qty:45,  alert:10, unit:'pcs',  prixU:0.35,  dlc: d(2),  fifo:true  },
+  { id:5,  name:'Galette durum',          supplier:'Boulangerie Orient',      cat:'pain',    qty:30,  alert:8,  unit:'pcs',  prixU:0.45,  dlc: d(2),  fifo:true  },
+  { id:6,  name:'Tomate',                 supplier:'Metro Cash & Carry',      cat:'legume',  qty:4,   alert:2,  unit:'kg',   prixU:1.80,  dlc: d(4),  fifo:true  },
+  { id:7,  name:'Salade iceberg',         supplier:'Metro Cash & Carry',      cat:'legume',  qty:2,   alert:3,  unit:'kg',   prixU:1.20,  dlc: d(3),  fifo:true  },
+  { id:8,  name:'Oignon',                 supplier:'Metro Cash & Carry',      cat:'legume',  qty:5,   alert:2,  unit:'kg',   prixU:0.90,  dlc: d(7),  fifo:false },
+  { id:9,  name:'Poivron mixte',          supplier:'Metro Cash & Carry',      cat:'legume',  qty:3,   alert:2,  unit:'kg',   prixU:2.50,  dlc: d(4),  fifo:false },
+  { id:10, name:'Sauce blanche maison',   supplier:'Fabrication interne',     cat:'sauce',   qty:3,   alert:2,  unit:'L',    prixU:2.00,  dlc: d(1),  fifo:true  },
+  { id:11, name:'Sauce piquante',         supplier:'Grossiste épices',        cat:'sauce',   qty:4,   alert:2,  unit:'L',    prixU:3.50,  dlc: d(30), fifo:false },
+  { id:12, name:'Harissa',                supplier:'Grossiste épices',        cat:'sauce',   qty:2,   alert:1,  unit:'kg',   prixU:4.00,  dlc: d(60), fifo:false },
+  { id:13, name:'Coca-Cola 33cl',         supplier:'Sysco Boissons',          cat:'boisson', qty:24,  alert:6,  unit:'pcs',  prixU:0.65,  dlc: d(180),fifo:false },
+  { id:14, name:'Eau minérale 50cl',      supplier:'Sysco Boissons',          cat:'boisson', qty:18,  alert:6,  unit:'pcs',  prixU:0.30,  dlc: d(365),fifo:false },
+  { id:15, name:'Ayran 25cl',             supplier:'Import Turkish Food',     cat:'boisson', qty:12,  alert:4,  unit:'pcs',  prixU:0.80,  dlc: d(14), fifo:false },
+  { id:16, name:'Redbull 25cl',           supplier:'Sysco Boissons',          cat:'boisson', qty:8,   alert:4,  unit:'pcs',  prixU:1.20,  dlc: d(180),fifo:false },
+  { id:17, name:'Frites (sac 10kg)',      supplier:'Findus Foodservice',      cat:'autre',   qty:2,   alert:2,  unit:'sac',  prixU:14.00, dlc: d(90), fifo:false },
+  { id:18, name:'Fromage fondu',          supplier:'Lactalis Foodservice',    cat:'autre',   qty:3,   alert:2,  unit:'kg',   prixU:6.50,  dlc: d(15), fifo:true  },
+  { id:19, name:'Œufs',                   supplier:'Elevage local',           cat:'autre',   qty:30,  alert:10, unit:'pcs',  prixU:0.25,  dlc: d(21), fifo:true  },
+  { id:20, name:'Huile de friture',       supplier:'Metro Cash & Carry',      cat:'autre',   qty:4,   alert:2,  unit:'L',    prixU:3.20,  dlc: d(180),fifo:false },
+];
+let stockIdCtr = 21;
+
+const CAT_LABELS = { viande:'Viande', legume:'Légume', pain:'Pain / Galette', sauce:'Sauce', boisson:'Boisson', autre:'Autre' };
 const CAT_CLS    = { viande:'cat-viande', legume:'cat-legume', pain:'cat-pain', sauce:'cat-sauce', boisson:'cat-boisson', autre:'cat-autre' };
 
-function renderStock(filter = '') {
-  const items = stockItems.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
-  document.getElementById('stock-tbody').innerHTML = items.map(s => {
-    const pct = Math.min(100, Math.round((s.qty / Math.max(s.alert * 3, 1)) * 100));
-    const barColor = s.qty <= s.alert ? '#E81212' : s.qty <= s.alert * 1.5 ? '#F59E0B' : '#22C55E';
-    const statusHtml = s.qty <= s.alert
-      ? `<span class="stock-alert">⚠ Stock bas</span>`
-      : `<span style="color:var(--green);font-size:0.78rem">✓ OK</span>`;
-    return `<tr>
-      <td class="stock-name">${s.name}</td>
-      <td><span class="stock-cat ${CAT_CLS[s.cat]}">${CAT_LABELS[s.cat]}</span></td>
-      <td>
-        <div class="qty-bar-wrap">
-          <div class="qty-bar-bg"><div class="qty-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
-          <span class="qty-num">${s.qty}</span>
-        </div>
-      </td>
-      <td style="color:var(--muted);font-size:0.82rem">${s.alert}</td>
-      <td style="color:var(--muted);font-size:0.82rem">${s.unit}</td>
-      <td>${statusHtml}</td>
-      <td style="display:flex;gap:6px">
-        <button class="btn-sm" onclick="editStock(${s.id})">Modifier</button>
-        <button class="btn-sm" onclick="adjustQty(${s.id}, 1)">+1</button>
-        <button class="btn-sm" onclick="adjustQty(${s.id}, -1)">−1</button>
-      </td>
-    </tr>`;
-  }).join('');
-  renderDashboard(); // refresh alerts
+let activeStockCat = 'tous';
+let movements = [];
+
+function addMvt(item, delta, type, reason='') {
+  movements.unshift({
+    name: item.name,
+    delta,
+    type, // 'in' | 'out' | 'adj'
+    reason,
+    time: new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+  });
+  if (movements.length > 50) movements.pop();
+  renderMvtList();
 }
 
-function filterStock() { renderStock(document.getElementById('stock-search').value); }
+function renderMvtList() {
+  const el = document.getElementById('mvt-list');
+  if (!el) return;
+  if (!movements.length) { el.innerHTML = '<p style="color:var(--muted);font-size:0.8rem;padding:8px">Aucun mouvement enregistré</p>'; return; }
+  const icons = { in:'📦', out:'🍽️', adj:'✏️' };
+  el.innerHTML = movements.slice(0,12).map(m => `
+    <div class="mvt-row">
+      <div class="mvt-icon mvt-${m.type}">${icons[m.type]}</div>
+      <div class="mvt-info">
+        <div class="mvt-name">${m.name}</div>
+        <div class="mvt-detail">${m.reason || (m.type==='in'?'Réception livraison':m.type==='out'?'Consommation service':'Ajustement inventaire')}</div>
+      </div>
+      <span class="mvt-delta ${m.delta>0?'pos':'neg'}">${m.delta>0?'+':''}${m.delta}</span>
+      <span class="mvt-time">${m.time}</span>
+    </div>`).join('');
+}
+
+function getStockStatus(s) {
+  if (s.qty === 0)           return { cls:'ss-rupture', label:'Rupture' };
+  if (s.qty <= s.alert)      return { cls:'ss-critic',  label:'Critique' };
+  if (s.qty <= s.alert * 1.5)return { cls:'ss-low',     label:'Stock bas' };
+  return                            { cls:'ss-ok',      label:'OK' };
+}
+
+function getDlcClass(dlc) {
+  if (!dlc) return 'dlc-ok';
+  const diff = Math.floor((new Date(dlc) - today) / 86400000);
+  if (diff < 0)  return 'dlc-exp';
+  if (diff <= 2) return 'dlc-warn';
+  return 'dlc-ok';
+}
+
+function renderStockKPIs() {
+  const el = document.getElementById('stock-kpis');
+  if (!el) return;
+  const alerts = stockItems.filter(s => s.qty <= s.alert).length;
+  const valeur = stockItems.reduce((a,s) => a + s.qty * s.prixU, 0);
+  const ruptures = stockItems.filter(s => s.qty === 0).length;
+  const dlcAlerts = stockItems.filter(s => {
+    if (!s.dlc) return false;
+    const diff = Math.floor((new Date(s.dlc) - today) / 86400000);
+    return diff <= 2;
+  }).length;
+  el.innerHTML = `
+    <div class="skpi ${alerts>0?'alert-kpi':''}">
+      <div class="skpi-label">Articles en alerte</div>
+      <div class="skpi-val">${alerts}</div>
+      <div class="skpi-sub">sur ${stockItems.length} articles</div>
+    </div>
+    <div class="skpi ${ruptures>0?'alert-kpi':''}">
+      <div class="skpi-label">Ruptures de stock</div>
+      <div class="skpi-val">${ruptures}</div>
+      <div class="skpi-sub">${ruptures>0?'⚠ Commander immédiatement':'Aucune rupture'}</div>
+    </div>
+    <div class="skpi">
+      <div class="skpi-label">Valeur totale stock</div>
+      <div class="skpi-val">${valeur.toFixed(0)}€</div>
+      <div class="skpi-sub">Prix d'achat estimé</div>
+    </div>
+    <div class="skpi ${dlcAlerts>0?'alert-kpi':''}">
+      <div class="skpi-label">DLC proches (≤2j)</div>
+      <div class="skpi-val">${dlcAlerts}</div>
+      <div class="skpi-sub">${dlcAlerts>0?'⚠ À utiliser en priorité':'Aucune urgence DLC'}</div>
+    </div>`;
+}
+
+function renderStockTabs() {
+  const el = document.getElementById('stock-tabs');
+  if (!el) return;
+  const cats = ['tous', ...Object.keys(CAT_LABELS)];
+  const labels = { tous:'Tous', ...CAT_LABELS };
+  el.innerHTML = cats.map(c =>
+    `<div class="stock-tab${c===activeStockCat?' active':''}" onclick="switchStockCat('${c}')">${labels[c]}</div>`
+  ).join('');
+}
+
+function switchStockCat(cat) { activeStockCat = cat; renderStockTabs(); renderStock(); }
+
+function renderStock() {
+  const search = (document.getElementById('stock-search')?.value || '').toLowerCase();
+  const items = stockItems.filter(s =>
+    (activeStockCat === 'tous' || s.cat === activeStockCat) &&
+    s.name.toLowerCase().includes(search)
+  );
+  const pct = (s) => Math.min(100, Math.round((s.qty / Math.max(s.alert * 3, 1)) * 100));
+  const barCol = (s) => s.qty === 0 ? '#555' : s.qty <= s.alert ? '#E81212' : s.qty <= s.alert * 1.5 ? '#F59E0B' : '#22C55E';
+
+  document.getElementById('stock-tbody').innerHTML = items.map(s => {
+    const st = getStockStatus(s);
+    const dlcCls = getDlcClass(s.dlc);
+    const dlcDiff = s.dlc ? Math.floor((new Date(s.dlc) - today) / 86400000) : null;
+    const dlcLabel = dlcDiff === null ? '—' : dlcDiff < 0 ? 'Expiré !' : dlcDiff === 0 ? "Auj." : `J+${dlcDiff}`;
+    const valeur = (s.qty * s.prixU).toFixed(2);
+    return `<tr>
+      <td>
+        <div class="stock-name">${s.name} ${s.fifo?'<span class="fifo-badge">FIFO</span>':''}</div>
+        <div class="stock-supplier">${s.supplier}</div>
+      </td>
+      <td><span class="stock-cat ${CAT_CLS[s.cat]}">${CAT_LABELS[s.cat]}</span></td>
+      <td>
+        <div class="slevel">
+          <div class="slevel-bar"><div class="slevel-fill" style="width:${pct(s)}%;background:${barCol(s)}"></div></div>
+          <span class="slevel-num">${s.qty}</span>
+          <span class="slevel-unit">${s.unit}</span>
+        </div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Alerte : ${s.alert} ${s.unit}</div>
+      </td>
+      <td style="color:var(--muted);font-size:0.82rem">${s.prixU.toFixed(2)}€ / ${s.unit}</td>
+      <td style="font-family:'Oswald',sans-serif;font-size:0.9rem">${valeur}€</td>
+      <td>
+        <span class="${dlcCls}">${dlcLabel}</span>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:1px">${s.dlc||''}</div>
+      </td>
+      <td><span class="sstatus ${st.cls}">${st.label}</span></td>
+      <td>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <div class="qty-adj">
+            <button onclick="adjustQty(${s.id},-1)">−</button>
+            <span>${s.qty}</span>
+            <button onclick="adjustQty(${s.id},1)">+</button>
+          </div>
+          <button class="btn-sm" onclick="openStockModal(${s.id})">✏️</button>
+          <button class="btn-sm" onclick="receiveStock(${s.id})" title="Réception livraison">📦</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucun article trouvé</td></tr>`;
+
+  renderStockKPIs();
+  renderKpiDetail();
+  renderDashboard();
+}
+
+function renderKpiDetail() {
+  const el = document.getElementById('kpi-detail');
+  if (!el) return;
+  const total = stockItems.length;
+  const alerts = stockItems.filter(s=>s.qty<=s.alert).length;
+  const valeur = stockItems.reduce((a,s)=>a+s.qty*s.prixU,0);
+  const foodCost = 32; // % estimé
+  const kpis = [
+    { label:'Food Cost %',         val:'~'+foodCost+'%',     note:'Objectif : < 30%',        ok: foodCost<30 },
+    { label:'Taux rotation stock', val:'2.4x / semaine',      note:'Fréquence renouvellement', ok: true  },
+    { label:'Taux de pertes estim.',val:'~4%',                note:'Objectif : < 5%',          ok: true  },
+    { label:'Articles en alerte',  val:alerts+' / '+total,   note:'À commander en urgence',   ok: alerts===0 },
+    { label:'Valeur totale stock', val:valeur.toFixed(0)+'€', note:'Coût d\'achat estimé',     ok: true  },
+    { label:'Méthode FIFO',        val:stockItems.filter(s=>s.fifo).length+' articles',note:'Premiers entrés, premiers sortis', ok:true },
+  ];
+  el.innerHTML = kpis.map(k => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:0.82rem;font-weight:500">${k.label}</div>
+        <div style="font-size:0.7rem;color:var(--muted)">${k.note}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Oswald',sans-serif;font-size:1rem;color:${k.ok?'var(--green)':'var(--red)'}">${k.val}</div>
+        <div style="font-size:0.65rem;color:${k.ok?'var(--green)':'var(--red)'}">${k.ok?'✓ OK':'⚠ Attention'}</div>
+      </div>
+    </div>`).join('');
+}
 
 function openStockModal(id = null) {
   editStockId = id;
   document.getElementById('stock-modal-title').textContent = id ? 'Modifier Article' : 'Ajouter Article';
   if (id) {
     const s = stockItems.find(x => x.id === id);
-    document.getElementById('s-name').value  = s.name;
-    document.getElementById('s-cat').value   = s.cat;
-    document.getElementById('s-qty').value   = s.qty;
-    document.getElementById('s-alert').value = s.alert;
-    document.getElementById('s-unit').value  = s.unit;
+    document.getElementById('s-name').value     = s.name;
+    document.getElementById('s-cat').value      = s.cat;
+    document.getElementById('s-qty').value      = s.qty;
+    document.getElementById('s-alert').value    = s.alert;
+    document.getElementById('s-unit').value     = s.unit;
+    document.getElementById('s-prixu').value    = s.prixU;
+    document.getElementById('s-supplier').value = s.supplier;
+    document.getElementById('s-dlc').value      = s.dlc || '';
   } else {
-    ['s-name','s-qty','s-alert','s-unit'].forEach(id => document.getElementById(id).value = '');
+    ['s-name','s-qty','s-alert','s-unit','s-prixu','s-supplier','s-dlc'].forEach(x => document.getElementById(x).value = '');
   }
   document.getElementById('modal-stock').classList.add('open');
 }
-function editStock(id) { openStockModal(id); }
+
 function adjustQty(id, delta) {
   const s = stockItems.find(x => x.id === id);
   if (!s) return;
+  const prev = s.qty;
   s.qty = Math.max(0, s.qty + delta);
-  renderStock(document.getElementById('stock-search').value);
-  if (s.qty <= s.alert) toast(`⚠ Stock bas : ${s.name} (${s.qty} ${s.unit})`, 'orange');
+  addMvt(s, s.qty - prev, delta > 0 ? 'in' : 'out');
+  renderStock();
+  if (s.qty <= s.alert && prev > s.alert) toast(`⚠ Stock bas : ${s.name} (${s.qty} ${s.unit})`, 'orange');
+  if (s.qty === 0) toast(`🚨 Rupture : ${s.name} — Commander immédiatement !`);
 }
+
+function receiveStock(id) {
+  const s = stockItems.find(x => x.id === id);
+  if (!s) return;
+  const qty = parseInt(prompt(`Réception livraison — ${s.name}\nQuantité reçue (${s.unit}) :`));
+  if (!qty || qty <= 0) return;
+  s.qty += qty;
+  addMvt(s, qty, 'in', 'Réception livraison');
+  renderStock();
+  toast(`📦 +${qty} ${s.unit} — ${s.name} réceptionné`, 'green');
+}
+
+function doInventory() {
+  toast('📋 Mode inventaire — modifiez les quantités directement dans le tableau', 'orange');
+}
+
 function saveStockItem() {
-  const name  = document.getElementById('s-name').value.trim();
-  const cat   = document.getElementById('s-cat').value;
-  const qty   = parseInt(document.getElementById('s-qty').value)||0;
-  const alert = parseInt(document.getElementById('s-alert').value)||0;
-  const unit  = document.getElementById('s-unit').value.trim()||'pcs';
-  if (!name) { alert('Nom requis'); return; }
+  const name     = document.getElementById('s-name').value.trim();
+  const cat      = document.getElementById('s-cat').value;
+  const qty      = parseFloat(document.getElementById('s-qty').value)||0;
+  const alertVal = parseFloat(document.getElementById('s-alert').value)||0;
+  const unit     = document.getElementById('s-unit').value.trim()||'pcs';
+  const prixU    = parseFloat(document.getElementById('s-prixu').value)||0;
+  const supplier = document.getElementById('s-supplier').value.trim();
+  const dlc      = document.getElementById('s-dlc').value;
+  if (!name) return;
   if (editStockId) {
     const s = stockItems.find(x => x.id === editStockId);
-    Object.assign(s, { name, cat, qty, alert, unit });
+    const oldQty = s.qty;
+    Object.assign(s, { name, cat, qty, alert:alertVal, unit, prixU, supplier, dlc });
+    if (qty !== oldQty) addMvt(s, qty - oldQty, 'adj', 'Correction inventaire');
     toast(`Stock mis à jour — ${name}`);
   } else {
-    stockItems.push({ id: stockIdCtr++, name, cat, qty, alert, unit });
+    stockItems.push({ id: stockIdCtr++, name, cat, qty, alert:alertVal, unit, prixU, supplier, dlc: dlc||null, fifo:false });
     toast(`Article ajouté — ${name}`, 'green');
   }
   closeModal('modal-stock');
@@ -1251,7 +1560,9 @@ function openMenuModal() {
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
+renderStockTabs();
 renderStock();
+renderMvtList();
 renderMenuTabs();
 renderMenuGrid();
 fetchSheet();
