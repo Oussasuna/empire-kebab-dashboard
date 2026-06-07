@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Empire du Kebab — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #E81212;
+      --red-dark: #b00e0e;
+      --red-glow: rgba(232,18,18,0.18);
+      --bg: #0f0f0f;
+      --surface: #181818;
+      --surface2: #202020;
+      --surface3: #272727;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #888;
+      --green: #22C55E;
+      --teal: #14B8A6;
+      --orange: #F59E0B;
+      --blue: #3B82F6;
+      --sidebar-w: 240px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; min-height: 100vh; overflow-x: hidden; }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+      transition: transform 0.3s;
+    }
+    .sidebar-logo {
+      padding: 20px 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: var(--red);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px var(--red-glow);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .logo-text { font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1.2; }
+    .logo-text span { display: block; font-size: 0.6rem; color: var(--muted); font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+
+    .nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+    .nav-section { padding: 0 12px; margin-bottom: 4px; }
+    .nav-label { font-size: 0.62rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; padding: 8px 8px 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--muted);
+      transition: all 0.15s;
+      margin-bottom: 2px;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: var(--red-glow); color: var(--red); border: 1px solid rgba(232,18,18,0.2); }
+    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .sync-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .sync-dot.syncing { background: var(--orange); box-shadow: 0 0 6px var(--orange); animation: blink 1s infinite; }
+    .sync-dot.error { background: #555; box-shadow: none; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── MAIN ────────────────────────────────────────────────────── */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(15,15,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 62px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .page-title { font-family: 'Oswald', sans-serif; font-size: 1.3rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+    .icon-btn {
+      width: 36px; height: 36px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .icon-btn svg { width: 16px; height: 16px; fill: var(--muted); }
+    .icon-btn .notif { position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: var(--red); border-radius: 50%; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    #clock { font-size: 0.8rem; color: var(--muted); font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+    .avatar { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.9rem; }
+
+    /* CONTENT */
+    .content { padding: 24px 28px 40px; flex: 1; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── DASHBOARD PAGE ──────────────────────────────────────────── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stat-card.red::before   { background: var(--red); }
+    .stat-card.green::before { background: var(--green); }
+    .stat-card.orange::before{ background: var(--orange); }
+    .stat-card.teal::before  { background: var(--teal); }
+    .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+    .stat-value { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .stat-sub { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .stat-sub .up   { color: var(--green); }
+    .stat-sub .down { color: var(--red); }
+    .stat-icon {
+      position: absolute; top: 18px; right: 18px;
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.15;
+    }
+    .stat-icon svg { width: 22px; height: 22px; fill: #fff; }
+    .stat-card.red   .stat-icon { background: var(--red);    opacity:1; }
+    .stat-card.green .stat-icon { background: var(--green);  opacity:1; }
+    .stat-card.orange .stat-icon{ background: var(--orange); opacity:1; }
+    .stat-card.teal  .stat-icon { background: var(--teal);   opacity:1; }
+
+    .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .dash-row.three { grid-template-columns: 2fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .card-sub { font-size: 0.72rem; color: var(--muted); margin-bottom: 16px; }
+
+    /* Trending list */
+    .trending-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .trending-item:last-child { border-bottom: none; }
+    .trending-rank {
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .trending-img {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--surface3);
+      object-fit: cover;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .trending-info { flex: 1; min-width: 0; }
+    .trending-name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .trending-price { font-size: 0.75rem; color: var(--muted); }
+    .trending-orders { font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--orange); font-weight: 600; }
+
+    /* Mini bar chart */
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; margin-top: 10px; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--red); opacity: 0.7; transition: opacity 0.2s; min-height: 4px; }
+    .bar:hover { opacity: 1; }
+    .bar-label { font-size: 0.6rem; color: var(--muted); }
+
+    /* Recent orders */
+    .order-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .order-row:last-child { border-bottom: none; }
+    .order-num { font-family: 'Oswald', sans-serif; color: var(--red); font-size: 0.78rem; min-width: 52px; }
+    .order-client { flex: 1; font-weight: 500; }
+    .order-items { color: var(--muted); font-size: 0.75rem; flex: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .order-type-tag {
+      font-size: 0.65rem; font-family: 'Oswald', sans-serif; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .tag-sp { background: #1D4ED8; color: #fff; }
+    .tag-lv { background: #EA580C; color: #fff; }
+    .status-pill {
+      font-size: 0.65rem; font-family: 'Oswald', sans-serif; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px;
+    }
+    .s-encours { background: rgba(245,158,11,0.15); color: var(--orange); }
+    .s-pret    { background: rgba(20,184,166,0.15); color: var(--teal); }
+    .s-livre   { background: rgba(34,197,94,0.15);  color: var(--green); }
+
+    /* ── ORDERS PAGE ─────────────────────────────────────────────── */
+    .board { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+    .col {
+      flex: 1; min-width: 290px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .col-head {
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .col-head h3 { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+    .col-badge { border-radius: 10px; padding: 2px 9px; font-family: 'Oswald', sans-serif; font-size: 0.7rem; font-weight: 700; }
+    .cb-orange { background: var(--orange); color: #111; }
+    .cb-teal   { background: var(--teal);   color: #111; }
+    .cb-green  { background: var(--green);  color: #111; }
+    .col-body  { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+    .o-card {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      border-left: 3px solid var(--red);
+    }
+    .o-card.new-card { animation: slideDown 0.4s ease; }
+    @keyframes slideDown { from{transform:translateY(-10px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .o-card-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .o-id { font-family: 'Oswald', sans-serif; font-size: 0.72rem; color: var(--red); letter-spacing: 1px; }
+    .o-time { font-size: 0.68rem; color: var(--muted); }
+    .o-name { font-family: 'Oswald', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .o-items { font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+    .o-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .o-source { font-size: 0.62rem; color: var(--teal); font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; margin-left: auto; }
+    .btn-action {
+      margin-left: auto;
+      border: none; border-radius: 5px;
+      padding: 5px 12px;
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-pret  { background: var(--red);   color: #fff; }
+    .btn-pret:hover { background: var(--red-dark); }
+    .btn-livre { background: var(--green); color: #111; }
+    .btn-livre:hover { background: #16a34a; }
+
+    .add-order-btn {
+      margin: 0 12px 12px;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      color: var(--muted);
+      font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .add-order-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── STOCK PAGE ──────────────────────────────────────────────── */
+    .stock-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-box {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 14px; flex: 1; min-width: 200px; max-width: 340px;
+    }
+    .search-box svg { width: 14px; height: 14px; fill: var(--muted); flex-shrink: 0; }
+    .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 0.85rem; width: 100%; }
+    .btn-primary {
+      background: var(--red); color: #fff; border: none; border-radius: 8px;
+      padding: 9px 18px; font-family: 'Oswald', sans-serif; font-size: 0.82rem;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--red-dark); }
+
+    .stock-table { width: 100%; border-collapse: collapse; }
+    .stock-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+      border-bottom: 1px solid var(--border); font-weight: 500;
+    }
+    .stock-table td { padding: 12px 14px; font-size: 0.84rem; border-bottom: 1px solid rgba(42,42,42,0.5); }
+    .stock-table tr:hover td { background: var(--surface2); }
+    .stock-name { font-weight: 500; }
+    .stock-cat {
+      font-size: 0.68rem; font-family: 'Oswald', sans-serif; letter-spacing: 1px;
+      padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+    }
+    .cat-viande   { background: rgba(232,18,18,0.15);   color: var(--red);    }
+    .cat-legume   { background: rgba(34,197,94,0.15);   color: var(--green);  }
+    .cat-boisson  { background: rgba(59,130,246,0.15);  color: var(--blue);   }
+    .cat-pain     { background: rgba(245,158,11,0.15);  color: var(--orange); }
+    .cat-sauce    { background: rgba(20,184,166,0.15);  color: var(--teal);   }
+    .cat-autre    { background: rgba(136,136,136,0.15); color: var(--muted);  }
+    .qty-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .qty-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; max-width: 80px; }
+    .qty-bar-fill { height: 5px; border-radius: 3px; }
+    .qty-num { font-family: 'Oswald', sans-serif; font-size: 0.82rem; min-width: 30px; }
+    .stock-alert { color: var(--red); font-size: 0.7rem; font-weight: 600; }
+    .btn-sm {
+      background: var(--surface3); border: 1px solid var(--border); border-radius: 5px;
+      padding: 4px 10px; font-size: 0.75rem; color: var(--text); cursor: pointer; font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.5px; transition: all 0.15s;
+    }
+    .btn-sm:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── MENU PAGE ───────────────────────────────────────────────── */
+    .menu-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .menu-tab {
+      padding: 7px 18px; border-radius: 8px; font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; border: 1px solid var(--border); color: var(--muted);
+      transition: all 0.15s;
+    }
+    .menu-tab:hover { border-color: var(--red); color: var(--text); }
+    .menu-tab.active { background: var(--red); border-color: var(--red); color: #fff; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .menu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .menu-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .menu-card-img {
+      height: 130px;
+      background: var(--surface3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+    .menu-card-img .popular-badge {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--red); color: #fff;
+      font-family: 'Oswald', sans-serif; font-size: 0.6rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .menu-card-body { padding: 14px; }
+    .menu-card-name { font-family: 'Oswald', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+    .menu-card-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; margin-bottom: 10px; }
+    .menu-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .menu-price { font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--red); }
+    .menu-toggle {
+      width: 36px; height: 20px;
+      background: var(--surface3);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 1px solid var(--border);
+    }
+    .menu-toggle.on { background: var(--green); border-color: var(--green); }
+    .menu-toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+    .menu-toggle.on::after { transform: translateX(16px); }
+
+    /* ── MODAL ───────────────────────────────────────────────────── */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      width: 400px; max-width: 95vw;
+      border-top: 3px solid var(--red);
+    }
+    .modal h3 {
+      font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; color: var(--red);
+    }
+    .modal label { display: block; font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 14px; }
+    .modal input, .modal textarea, .modal select {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 0.88rem; outline: none;
+      transition: border-color 0.15s;
+    }
+    .modal input:focus, .modal textarea:focus, .modal select:focus { border-color: var(--red); }
+    .modal textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .modal-actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+    .btn-confirm { background: var(--red); color: #fff; }
+    .btn-cancel  { background: var(--surface3); color: var(--muted); }
+
+    /* ── TOAST ───────────────────────────────────────────────────── */
+    #toasts {
+      position: fixed; bottom: 24px; right: 24px;
+      display: flex; flex-direction: column; gap: 8px; z-index: 999;
+    }
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 3.5s forwards;
+      max-width: 300px;
+    }
+    .toast.green { border-left-color: var(--green); }
+    .toast.orange { border-left-color: var(--orange); }
+    @keyframes toastIn  { from{transform:translateX(60px);opacity:0} to{transform:translateX(0);opacity:1} }
+    @keyframes toastOut { to{transform:translateX(60px);opacity:0} }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .dash-row, .dash-row.three { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+    </div>
+    <div class="logo-text">L'Empire<span>du kebab</span></div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">Principal</div>
+      <a class="nav-item active" onclick="showPage('dashboard')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" onclick="showPage('orders')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        Commandes
+        <span class="nav-badge" id="nav-badge-orders">0</span>
+      </a>
+      <a class="nav-item" onclick="showPage('stock')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.34 0-2.58-2.09-4.66-4.67-4.66-1.4 0-2.67.59-3.57 1.53L8 3.26 6.22 1.53C5.32.59 4.05 0 2.65 0 .07 0-1.98 2.08-1.98 4.66c0 .46.09.9.18 1.34H-2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6zm-8 13H6v-2h6v2zm0-4H6v-2h6v2zm0-4H6V9h6v2zm6 8h-4V9h4v10z"/></svg>
+        Gestion Stock
+        <span class="nav-badge" id="nav-badge-stock" style="background:var(--orange);display:none">!</span>
+      </a>
+      <a class="nav-item" onclick="showPage('menu')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
+        Menu
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sync-pill">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-label">Google Sheet</span>
+      <span style="margin-left:auto;font-size:0.65rem" id="sync-countdown">15s</span>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="page-title" id="page-title">Dashboard</div>
+    <div class="topbar-right">
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        <span class="notif" id="notif-count">0</span>
+      </div>
+      <span id="clock"></span>
+      <div class="avatar">EK</div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ══ DASHBOARD PAGE ══════════════════════════════════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card red">
+          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+          <div class="stat-label">Commandes aujourd'hui</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-sub"><span class="up">↑ En direct</span> depuis Google Sheet</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+          <div class="stat-label">En cours</div>
+          <div class="stat-value" id="stat-encours">0</div>
+          <div class="stat-sub">En préparation cuisine</div>
+        </div>
+        <div class="stat-card teal">
+          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+          <div class="stat-label">Prêts</div>
+          <div class="stat-value" id="stat-pret">0</div>
+          <div class="stat-sub">En attente client</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+          <div class="stat-label">Livrés / Servis</div>
+          <div class="stat-value" id="stat-livre">0</div>
+          <div class="stat-sub">Completés ce soir</div>
+        </div>
+      </div>
+
+      <div class="dash-row three">
+        <!-- Recent orders -->
+        <div class="card">
+          <div class="card-title">Commandes récentes</div>
+          <div class="card-sub">Dernières commandes reçues depuis le sheet</div>
+          <div id="recent-orders-list"></div>
+        </div>
+        <!-- Trending items -->
+        <div class="card">
+          <div class="card-title">Top Articles</div>
+          <div class="card-sub">Les plus commandés ce soir</div>
+          <div id="trending-list"></div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <!-- Bar chart -->
+        <div class="card">
+          <div class="card-title">Volume commandes (7 derniers jours)</div>
+          <div class="card-sub">Simulation — activez la connexion historique</div>
+          <div class="bar-chart" id="bar-chart"></div>
+        </div>
+        <!-- Stock alerts -->
+        <div class="card">
+          <div class="card-title">Alertes Stock</div>
+          <div class="card-sub">Articles en rupture ou stock bas</div>
+          <div id="stock-alerts-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ORDERS PAGE ════════════════════════════════════════════ -->
+    <div class="page" id="page-orders">
+      <div class="board">
+        <div class="col">
+          <div class="col-head">
+            <h3>En cours</h3>
+            <span class="col-badge cb-orange" id="b-encours">0</span>
+          </div>
+          <div class="col-body" id="col-encours"></div>
+          <div class="add-order-btn" onclick="openModal()">+ Nouvelle commande</div>
+        </div>
+        <div class="col">
+          <div class="col-head">
+            <h3>Prêt</h3>
+            <span class="col-badge cb-teal" id="b-pret">0</span>
+          </div>
+          <div class="col-body" id="col-pret"></div>
+        </div>
+        <div class="col">
+          <div class="col-head">
+            <h3>Livré / Servi</h3>
+            <span class="col-badge cb-green" id="b-livre">0</span>
+          </div>
+          <div class="col-body" id="col-livre"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STOCK PAGE ═════════════════════════════════════════════ -->
+    <div class="page" id="page-stock">
+      <div class="stock-toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" placeholder="Rechercher un article..." id="stock-search" oninput="filterStock()">
+        </div>
+        <button class="btn-primary" onclick="openStockModal()">+ Ajouter article</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="stock-table" id="stock-table">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Catégorie</th>
+              <th>Stock</th>
+              <th>Seuil alerte</th>
+              <th>Unité</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="stock-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ MENU PAGE ══════════════════════════════════════════════ -->
+    <div class="page" id="page-menu">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+        <div class="menu-tabs" id="menu-tabs"></div>
+        <button class="btn-primary" style="margin-left:auto" onclick="openMenuModal()">+ Ajouter produit</button>
+      </div>
+      <div class="menu-grid" id="menu-grid"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- MODAL COMMANDE -->
+<div class="modal-backdrop" id="modal-order">
+  <div class="modal">
+    <h3>Nouvelle Commande</h3>
+    <label>Nom du client</label>
+    <input type="text" id="inp-client" placeholder="Ex: Mohamed">
+    <label>Articles</label>
+    <textarea id="inp-items" placeholder="Ex: 2x Kebab Assiette, 1x Frites, 1x Soda"></textarea>
+    <label>Type</label>
+    <select id="inp-type">
+      <option value="surplace">Sur Place</option>
+      <option value="livraison">Livraison</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-order')">Annuler</button>
+      <button class="btn-confirm" onclick="addLocalOrder()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL STOCK -->
+<div class="modal-backdrop" id="modal-stock">
+  <div class="modal">
+    <h3 id="stock-modal-title">Ajouter Article</h3>
+    <label>Nom de l'article</label>
+    <input type="text" id="s-name" placeholder="Ex: Viande agneau">
+    <label>Catégorie</label>
+    <select id="s-cat">
+      <option value="viande">Viande</option>
+      <option value="legume">Légume</option>
+      <option value="pain">Pain / Galette</option>
+      <option value="sauce">Sauce</option>
+      <option value="boisson">Boisson</option>
+      <option value="autre">Autre</option>
+    </select>
+    <label>Quantité actuelle</label>
+    <input type="number" id="s-qty" placeholder="Ex: 10" min="0">
+    <label>Seuil d'alerte</label>
+    <input type="number" id="s-alert" placeholder="Ex: 3" min="0">
+    <label>Unité</label>
+    <input type="text" id="s-unit" placeholder="Ex: kg, pcs, L">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-stock')">Annuler</button>
+      <button class="btn-confirm" onclick="saveStockItem()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const SHEET_ID  = '1h9XqRZAXa_HeQTGL9mV3VISxuF5J5jMzTAiJgCPRZs0';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&cachebust=`;
+const POLL_MS   = 15000;
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const orders   = {};
+const seenIds  = new Set();
+let localCtr   = 0;
+let countdown  = POLL_MS / 1000;
+let editStockId = null;
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+const PAGE_TITLES = { dashboard:'Dashboard', orders:'Commandes', stock:'Gestion Stock', menu:'Menu' };
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('page-title').textContent = PAGE_TITLES[id];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════════════════════
+setInterval(() => {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}, 1000);
+
+// ═══════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════
+function toast(msg, type = '') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CSV PARSER
+// ═══════════════════════════════════════════════════════════════
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = splitLine(lines[0]).map(h => h.trim().toLowerCase());
+  return lines.slice(1).map(l => {
+    const v = splitLine(l);
+    const r = {};
+    headers.forEach((h,i) => r[h] = (v[i]||'').trim());
+    return r;
+  });
+}
+function splitLine(line) {
+  const res = []; let cur = '', q = false;
+  for (let c of line) {
+    if (c === '"') q = !q;
+    else if (c === ',' && !q) { res.push(cur); cur = ''; }
+    else cur += c;
+  }
+  res.push(cur); return res;
+}
+function rowToOrder(row) {
+  const id = row['order id'] || row['orderid'] || '';
+  if (!id) return null;
+  const rawStatus = (row['status'] || '').toLowerCase();
+  let status = 'encours';
+  if (/pr[eê]t|ready/.test(rawStatus)) status = 'pret';
+  else if (/livr|servi|done|delivered/.test(rawStatus)) status = 'livre';
+  return {
+    id,
+    client: row['customer name'] || '?',
+    items:  row['commande'] || row['items'] || '—',
+    type:   (row['pickup/delivery']||'').toLowerCase().includes('liv') ? 'livraison' : 'surplace',
+    time:   row['time'] || fmtTime(row['timestamp']),
+    status,
+    source: 'sheet'
+  };
+}
+function fmtTime(ts) {
+  if (!ts) return '--:--';
+  try { return new Date(ts).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); } catch{ return '--:--'; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FETCH SHEET
+// ═══════════════════════════════════════════════════════════════
+async function fetchSheet() {
+  setSyncState('syncing');
+  try {
+    const r = await fetch(SHEET_URL + Date.now(), { cache:'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const rows = parseCSV(await r.text());
+    let newCount = 0;
+    rows.forEach(row => {
+      const o = rowToOrder(row);
+      if (!o) return;
+      if (!seenIds.has(o.id)) { seenIds.add(o.id); orders[o.id] = o; newCount++; }
+      else if (orders[o.id]) orders[o.id].status = o.status;
+    });
+    renderAll();
+    setSyncState('ok');
+    if (newCount > 0) {
+      toast(`🔔 ${newCount} nouvelle${newCount>1?'s':''} commande${newCount>1?'s':''} reçue${newCount>1?'s':''}`, 'green');
+      const cur = parseInt(document.getElementById('notif-count').textContent)||0;
+      document.getElementById('notif-count').textContent = cur + newCount;
+    }
+  } catch(e) {
+    setSyncState('error');
+    console.error(e);
+  }
+}
+function setSyncState(s) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot' + (s==='syncing'?' syncing':s==='error'?' error':'');
+  lbl.textContent = s==='syncing' ? 'Synchro...' : s==='error' ? 'Erreur' : 'Google Sheet';
+}
+
+// Countdown
+setInterval(() => {
+  countdown--;
+  if (countdown <= 0) { countdown = POLL_MS / 1000; fetchSheet(); }
+  document.getElementById('sync-countdown').textContent = countdown + 's';
+}, 1000);
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════════
+function renderAll() {
+  renderOrders();
+  renderDashboard();
+}
+
+function renderOrders() {
+  const all = Object.values(orders);
+  ['encours','pret','livre'].forEach(s => {
+    const list = all.filter(o => o.status === s);
+    document.getElementById('b-' + s).textContent = list.length;
+    const container = document.getElementById('col-' + s);
+    const existing  = new Set([...container.querySelectorAll('[data-id]')].map(e => e.dataset.id));
+    const current   = new Set(list.map(o => o.id));
+    existing.forEach(id => { if (!current.has(id)) container.querySelector(`[data-id="${id}"]`)?.remove(); });
+    list.forEach(o => {
+      if (!existing.has(o.id)) container.insertBefore(buildOrderCard(o, true), container.firstChild);
+    });
+  });
+  const total = Object.keys(orders).length;
+  document.getElementById('nav-badge-orders').textContent = total;
+}
+
+function buildOrderCard(o, isNew) {
+  const d = document.createElement('div');
+  d.className = 'o-card' + (isNew?' new-card':'');
+  d.dataset.id = o.id;
+  const shortId = String(o.id).slice(-4).toUpperCase();
+  const tagCls  = o.type === 'livraison' ? 'tag-lv' : 'tag-sp';
+  const tagLbl  = o.type === 'livraison' ? 'Livraison' : 'Sur Place';
+  let btn = '';
+  if (o.status === 'encours') btn = `<button class="btn-action btn-pret" onclick="moveOrder('${o.id}','pret')">Marquer Prêt</button>`;
+  else if (o.status === 'pret') btn = `<button class="btn-action btn-livre" onclick="moveOrder('${o.id}','livre')">Marquer Livré</button>`;
+  d.innerHTML = `
+    <div class="o-card-top"><span class="o-id">#${shortId}</span><span class="o-time">${o.time}</span></div>
+    <div class="o-name">${o.client}</div>
+    <div class="o-items">${o.items.replace(/\n/g,'<br>')}</div>
+    <div class="o-footer">
+      <span class="order-type-tag ${tagCls}">${tagLbl}</span>
+      ${o.source==='sheet'?'<span class="o-source">Sheet</span>':''}
+      ${btn}
+    </div>`;
+  return d;
+}
+
+function moveOrder(id, s) {
+  if (!orders[id]) return;
+  orders[id].status = s;
+  const labels = {pret:'Prêt ✓', livre:'Livré ✓'};
+  toast(`#${String(id).slice(-4).toUpperCase()} — ${labels[s]}`);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function renderDashboard() {
+  const all = Object.values(orders);
+  const encours = all.filter(o=>o.status==='encours').length;
+  const pret    = all.filter(o=>o.status==='pret').length;
+  const livre   = all.filter(o=>o.status==='livre').length;
+  document.getElementById('stat-total').textContent   = all.length;
+  document.getElementById('stat-encours').textContent = encours;
+  document.getElementById('stat-pret').textContent    = pret;
+  document.getElementById('stat-livre').textContent   = livre;
+
+  // Recent orders
+  const recentEl = document.getElementById('recent-orders-list');
+  const recent = all.slice(-6).reverse();
+  recentEl.innerHTML = recent.length ? recent.map(o => {
+    const sc = {encours:'s-encours',pret:'s-pret',livre:'s-livre'}[o.status];
+    const sl = {encours:'En cours',pret:'Prêt',livre:'Livré'}[o.status];
+    const tc = o.type==='livraison'?'tag-lv':'tag-sp';
+    const tl = o.type==='livraison'?'Livraison':'Sur Place';
+    return `<div class="order-row">
+      <span class="order-num">#${String(o.id).slice(-4).toUpperCase()}</span>
+      <span class="order-client">${o.client}</span>
+      <span class="order-items">${o.items}</span>
+      <span class="order-type-tag ${tc}">${tl}</span>
+      <span class="status-pill ${sc}">${sl}</span>
+    </div>`;
+  }).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">Aucune commande</p>';
+
+  // Trending items — count occurrences in items text
+  const freq = {};
+  all.forEach(o => {
+    o.items.toLowerCase().split(/[,\n]/).forEach(part => {
+      const p = part.replace(/\d+x?\s*/,'').trim();
+      if (p.length > 2) freq[p] = (freq[p]||0) + 1;
+    });
+  });
+  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const emojis = ['🥙','🍟','🥤','🫓','🥗'];
+  document.getElementById('trending-list').innerHTML = sorted.length ? sorted.map(([name,cnt],i) =>
+    `<div class="trending-item">
+      <span class="trending-rank">${i+1}</span>
+      <span class="trending-img">${emojis[i]||'🍽️'}</span>
+      <div class="trending-info"><div class="trending-name">${name}</div></div>
+      <span class="trending-orders">${cnt}x</span>
+    </div>`
+  ).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">Données insuffisantes</p>';
+
+  // Bar chart (mock 7 days)
+  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const vals = [12,18,9,22,31,45, all.length || 8];
+  const max = Math.max(...vals);
+  document.getElementById('bar-chart').innerHTML = vals.map((v,i) =>
+    `<div class="bar-wrap">
+      <div class="bar" style="height:${Math.round((v/max)*90)}px" title="${v} commandes"></div>
+      <span class="bar-label">${days[i]}</span>
+    </div>`
+  ).join('');
+
+  // Stock alerts
+  const alerts = stockItems.filter(s => s.qty <= s.alert);
+  document.getElementById('nav-badge-stock').style.display = alerts.length ? 'inline-flex' : 'none';
+  document.getElementById('stock-alerts-list').innerHTML = alerts.length ? alerts.map(s =>
+    `<div class="order-row">
+      <span class="order-client">${s.name}</span>
+      <span class="stock-alert">⚠ ${s.qty} ${s.unit} restant${s.qty>1?'s':''}</span>
+    </div>`
+  ).join('') : '<p style="color:var(--green);font-size:0.82rem;padding:10px 0">✓ Tous les stocks sont OK</p>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════════════
+function openModal()  { document.getElementById('modal-order').classList.add('open'); document.getElementById('inp-client').focus(); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); }));
+
+function addLocalOrder() {
+  const client = document.getElementById('inp-client').value.trim();
+  const items  = document.getElementById('inp-items').value.trim();
+  const type   = document.getElementById('inp-type').value;
+  if (!client||!items) { alert('Remplir le nom et les articles.'); return; }
+  localCtr++;
+  const id = 'local-' + localCtr;
+  orders[id] = { id, client, items, type, status:'encours', time: new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), source:'local' };
+  seenIds.add(id);
+  closeModal('modal-order');
+  document.getElementById('inp-client').value = '';
+  document.getElementById('inp-items').value  = '';
+  renderAll();
+  toast(`Commande créée — ${client}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STOCK
+// ═══════════════════════════════════════════════════════════════
+let stockItems = [
+  { id:1, name:'Viande agneau (broche)',  cat:'viande',  qty:8,  alert:3, unit:'kg'  },
+  { id:2, name:'Viande poulet',           cat:'viande',  qty:6,  alert:3, unit:'kg'  },
+  { id:3, name:'Pain kebab',              cat:'pain',    qty:45, alert:10,unit:'pcs' },
+  { id:4, name:'Galette durum',           cat:'pain',    qty:30, alert:8, unit:'pcs' },
+  { id:5, name:'Tomate',                  cat:'legume',  qty:4,  alert:2, unit:'kg'  },
+  { id:6, name:'Salade iceberg',          cat:'legume',  qty:2,  alert:3, unit:'kg'  },
+  { id:7, name:'Oignon',                  cat:'legume',  qty:5,  alert:2, unit:'kg'  },
+  { id:8, name:'Sauce blanche',           cat:'sauce',   qty:3,  alert:2, unit:'L'   },
+  { id:9, name:'Sauce piquante',          cat:'sauce',   qty:4,  alert:2, unit:'L'   },
+  { id:10,name:'Coca-Cola',               cat:'boisson', qty:24, alert:6, unit:'pcs' },
+  { id:11,name:'Eau 50cl',                cat:'boisson', qty:18, alert:6, unit:'pcs' },
+  { id:12,name:'Frites (sac 10kg)',        cat:'autre',   qty:2,  alert:2, unit:'sac' },
+];
+let stockIdCtr = 13;
+
+const CAT_LABELS = { viande:'Viande', legume:'Légume', pain:'Pain', sauce:'Sauce', boisson:'Boisson', autre:'Autre' };
+const CAT_CLS    = { viande:'cat-viande', legume:'cat-legume', pain:'cat-pain', sauce:'cat-sauce', boisson:'cat-boisson', autre:'cat-autre' };
+
+function renderStock(filter = '') {
+  const items = stockItems.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
+  document.getElementById('stock-tbody').innerHTML = items.map(s => {
+    const pct = Math.min(100, Math.round((s.qty / Math.max(s.alert * 3, 1)) * 100));
+    const barColor = s.qty <= s.alert ? '#E81212' : s.qty <= s.alert * 1.5 ? '#F59E0B' : '#22C55E';
+    const statusHtml = s.qty <= s.alert
+      ? `<span class="stock-alert">⚠ Stock bas</span>`
+      : `<span style="color:var(--green);font-size:0.78rem">✓ OK</span>`;
+    return `<tr>
+      <td class="stock-name">${s.name}</td>
+      <td><span class="stock-cat ${CAT_CLS[s.cat]}">${CAT_LABELS[s.cat]}</span></td>
+      <td>
+        <div class="qty-bar-wrap">
+          <div class="qty-bar-bg"><div class="qty-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+          <span class="qty-num">${s.qty}</span>
+        </div>
+      </td>
+      <td style="color:var(--muted);font-size:0.82rem">${s.alert}</td>
+      <td style="color:var(--muted);font-size:0.82rem">${s.unit}</td>
+      <td>${statusHtml}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn-sm" onclick="editStock(${s.id})">Modifier</button>
+        <button class="btn-sm" onclick="adjustQty(${s.id}, 1)">+1</button>
+        <button class="btn-sm" onclick="adjustQty(${s.id}, -1)">−1</button>
+      </td>
+    </tr>`;
+  }).join('');
+  renderDashboard(); // refresh alerts
+}
+
+function filterStock() { renderStock(document.getElementById('stock-search').value); }
+
+function openStockModal(id = null) {
+  editStockId = id;
+  document.getElementById('stock-modal-title').textContent = id ? 'Modifier Article' : 'Ajouter Article';
+  if (id) {
+    const s = stockItems.find(x => x.id === id);
+    document.getElementById('s-name').value  = s.name;
+    document.getElementById('s-cat').value   = s.cat;
+    document.getElementById('s-qty').value   = s.qty;
+    document.getElementById('s-alert').value = s.alert;
+    document.getElementById('s-unit').value  = s.unit;
+  } else {
+    ['s-name','s-qty','s-alert','s-unit'].forEach(id => document.getElementById(id).value = '');
+  }
+  document.getElementById('modal-stock').classList.add('open');
+}
+function editStock(id) { openStockModal(id); }
+function adjustQty(id, delta) {
+  const s = stockItems.find(x => x.id === id);
+  if (!s) return;
+  s.qty = Math.max(0, s.qty + delta);
+  renderStock(document.getElementById('stock-search').value);
+  if (s.qty <= s.alert) toast(`⚠ Stock bas : ${s.name} (${s.qty} ${s.unit})`, 'orange');
+}
+function saveStockItem() {
+  const name  = document.getElementById('s-name').value.trim();
+  const cat   = document.getElementById('s-cat').value;
+  const qty   = parseInt(document.getElementById('s-qty').value)||0;
+  const alert = parseInt(document.getElementById('s-alert').value)||0;
+  const unit  = document.getElementById('s-unit').value.trim()||'pcs';
+  if (!name) { alert('Nom requis'); return; }
+  if (editStockId) {
+    const s = stockItems.find(x => x.id === editStockId);
+    Object.assign(s, { name, cat, qty, alert, unit });
+    toast(`Stock mis à jour — ${name}`);
+  } else {
+    stockItems.push({ id: stockIdCtr++, name, cat, qty, alert, unit });
+    toast(`Article ajouté — ${name}`, 'green');
+  }
+  closeModal('modal-stock');
+  renderStock();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MENU
+// ═══════════════════════════════════════════════════════════════
+const menuData = {
+  kebabs: [
+    { id:1, name:'Kebab Assiette',     desc:'Viande d\'agneau grillée, frites, salade, tomate, sauce blanche', price:'11.90', emoji:'🥙', popular:true,  active:true  },
+    { id:2, name:'Kebab Sandwich',     desc:'Pain maison, viande, crudités, sauce au choix', price:'7.50',  emoji:'🥙', popular:false, active:true  },
+    { id:3, name:'Double Kebab',       desc:'Double portion de viande, assiette garnie complète', price:'14.50', emoji:'🥙', popular:true,  active:true  },
+    { id:4, name:'Kebab Galette',      desc:'Galette croustillante, viande marinée, légumes frais', price:'8.50',  emoji:'🫓', popular:false, active:true  },
+  ],
+  durums: [
+    { id:5, name:'Durum Classique',    desc:'Galette roulée, viande tendre, crudités fraîches', price:'8.90',  emoji:'🌯', popular:false, active:true  },
+    { id:6, name:'Durum Royal',        desc:'Galette XXL, double viande, sauce signature', price:'11.50', emoji:'🌯', popular:true,  active:true  },
+  ],
+  brochettes: [
+    { id:7, name:'Brochette Agneau',   desc:'3 brochettes d\'agneau grillées, pain, salade', price:'13.90', emoji:'🍢', popular:false, active:true  },
+    { id:8, name:'Brochette Poulet',   desc:'3 brochettes de poulet mariné, sauce blanche', price:'12.50', emoji:'🍢', popular:false, active:true  },
+  ],
+  boissons: [
+    { id:9,  name:'Coca-Cola 33cl',    desc:'Canette fraîche', price:'2.50',  emoji:'🥤', popular:false, active:true  },
+    { id:10, name:'Eau Minérale',      desc:'Bouteille 50cl', price:'1.50',  emoji:'💧', popular:false, active:true  },
+    { id:11, name:'Jus d\'orange',     desc:'Bouteille 33cl', price:'2.90',  emoji:'🍊', popular:false, active:true  },
+  ],
+  extras: [
+    { id:12, name:'Portion de Frites', desc:'Frites fraîches croustillantes', price:'3.50',  emoji:'🍟', popular:false, active:true  },
+    { id:13, name:'Supplément sauce',  desc:'Sauce blanche, piquante ou harissa', price:'0.50',  emoji:'🫙', popular:false, active:false },
+  ],
+};
+const menuCatLabels = { kebabs:'Kebabs', durums:'Durums', brochettes:'Brochettes', boissons:'Boissons', extras:'Extras' };
+let activeMenuCat = 'kebabs';
+
+function renderMenuTabs() {
+  const tabsEl = document.getElementById('menu-tabs');
+  tabsEl.innerHTML = Object.keys(menuData).map(k =>
+    `<div class="menu-tab${k===activeMenuCat?' active':''}" onclick="switchMenuCat('${k}')">${menuCatLabels[k]}</div>`
+  ).join('');
+}
+function switchMenuCat(cat) { activeMenuCat = cat; renderMenuTabs(); renderMenuGrid(); }
+
+function renderMenuGrid() {
+  const items = menuData[activeMenuCat] || [];
+  document.getElementById('menu-grid').innerHTML = items.map(item => `
+    <div class="menu-card">
+      <div class="menu-card-img">
+        ${item.emoji}
+        ${item.popular ? '<span class="popular-badge">⭐ Top</span>' : ''}
+      </div>
+      <div class="menu-card-body">
+        <div class="menu-card-name">${item.name}</div>
+        <div class="menu-card-desc">${item.desc}</div>
+        <div class="menu-card-footer">
+          <span class="menu-price">${item.price}€</span>
+          <div class="menu-toggle${item.active?' on':''}" onclick="toggleMenu(${item.id})" title="${item.active?'Disponible':'Indisponible'}"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function toggleMenu(id) {
+  for (const cat of Object.values(menuData)) {
+    const item = cat.find(x => x.id === id);
+    if (item) { item.active = !item.active; renderMenuGrid(); toast(item.active ? `${item.name} — Activé` : `${item.name} — Désactivé`, item.active?'green':''); break; }
+  }
+}
+function openMenuModal() {
+  toast('Fonctionnalité ajout menu — bientôt disponible', 'orange');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+renderStock();
+renderMenuTabs();
+renderMenuGrid();
+fetchSheet();
+setInterval(fetchSheet, POLL_MS);
+</script>
+</body>
+</html>
