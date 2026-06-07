@@ -391,6 +391,12 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 3rem;
       position: relative;
+      overflow: hidden;
+    }
+    .menu-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .menu-card-img .popular-badge {
       position: absolute; top: 8px; right: 8px;
@@ -423,6 +429,32 @@
       transition: transform 0.2s;
     }
     .menu-toggle.on::after { transform: translateX(16px); }
+
+    .menu-inactive { opacity: 0.5; }
+    .unavailable-badge {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0,0,0,0.75); color: #aaa;
+      font-family: 'Oswald', sans-serif; font-size: 0.6rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .qty-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .qty-label { font-size: 0.7rem; color: var(--muted); flex: 1; }
+    .qty-btn {
+      width: 24px; height: 24px;
+      background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 5px; color: var(--text); font-size: 1rem; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .qty-btn:hover { border-color: var(--red); color: var(--red); }
+    .qty-val {
+      font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 700;
+      min-width: 24px; text-align: center; color: var(--text);
+    }
 
     /* ── MODAL ───────────────────────────────────────────────────── */
     .modal-backdrop {
@@ -1106,32 +1138,58 @@ function saveStockItem() {
 // ═══════════════════════════════════════════════════════════════
 // MENU
 // ═══════════════════════════════════════════════════════════════
+const BASE = 'https://empirekebab.fr';
 const menuData = {
-  kebabs: [
-    { id:1, name:'Kebab Assiette',     desc:'Viande d\'agneau grillée, frites, salade, tomate, sauce blanche', price:'11.90', emoji:'🥙', popular:true,  active:true  },
-    { id:2, name:'Kebab Sandwich',     desc:'Pain maison, viande, crudités, sauce au choix', price:'7.50',  emoji:'🥙', popular:false, active:true  },
-    { id:3, name:'Double Kebab',       desc:'Double portion de viande, assiette garnie complète', price:'14.50', emoji:'🥙', popular:true,  active:true  },
-    { id:4, name:'Kebab Galette',      desc:'Galette croustillante, viande marinée, légumes frais', price:'8.50',  emoji:'🫓', popular:false, active:true  },
+  plats: [
+    { id:1,  name:'Kebab',                     desc:'Sandwich kebab classique maison',                         price:'7.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1bc227fe_images_small.webp',  popular:true,  active:true,  qty:0 },
+    { id:2,  name:'Kebab frites',              desc:'Kebab accompagné d\'une barquette de frites',             price:'9.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1bfa0086_images_small.webp',  popular:true,  active:true,  qty:0 },
+    { id:3,  name:'Double kebab',              desc:'Double portion de viande dans un pain maison',            price:'10.50', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1c9ba020_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:4,  name:'Double kebab frites',       desc:'Double kebab avec barquette de frites',                   price:'12.50', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1cdf2c83_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:5,  name:'Durum kebab',               desc:'Galette croustillante garnie de viande kebab',            price:'7.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1ea656b4_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:6,  name:'Durum poulet',              desc:'Galette garnie de poulet grillé mariné',                  price:'8.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1ee60af6_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:7,  name:'Brochette agneau',          desc:'Brochettes d\'agneau grillées, pain, salade',             price:'8.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1f2c9634_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:8,  name:'Brochette poulet',          desc:'Brochettes de poulet mariné, sauce blanche',              price:'7.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c1f74775f_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:9,  name:'Pizza Kebab',               desc:'Pizza garnie de viande kebab et légumes frais',           price:'8.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c206c52eb_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:10, name:'Saucisse Turque',           desc:'Sucuk grillé servi en sandwich',                          price:'7.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c20c3c5c6_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:11, name:'Hamburger',                 desc:'Burger maison avec steak haché et garniture',             price:'6.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2116f09e_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:12, name:'Cheeseburger',              desc:'Burger avec fromage fondu et garniture complète',         price:'7.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c21672766_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:13, name:'Américain',                 desc:'Sandwich américain généreux avec viande et légumes',      price:'8.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2210d545_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:14, name:'Cheese américain',          desc:'Américain avec fromage fondu supplémentaire',             price:'9.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2245e9bc_images_small.webp',  popular:false, active:true,  qty:0 },
   ],
-  durums: [
-    { id:5, name:'Durum Classique',    desc:'Galette roulée, viande tendre, crudités fraîches', price:'8.90',  emoji:'🌯', popular:false, active:true  },
-    { id:6, name:'Durum Royal',        desc:'Galette XXL, double viande, sauce signature', price:'11.50', emoji:'🌯', popular:true,  active:true  },
+  assiettes: [
+    { id:15, name:'Assiette kebab',            desc:'Viande kebab, frites, salade, tomate, sauce',             price:'13.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66f2bbd042ab9_images_small.webp',  popular:true,  active:true,  qty:0 },
+    { id:16, name:'Assiette cheese',           desc:'Viande kebab, fromage fondu, frites, salade',             price:'13.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66f2bbcc3c9d5_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:17, name:'Assiette saucisse turque',  desc:'Sucuk grillé, frites, crudités fraîches',                 price:'13.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66f2bbc68419c_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:18, name:'Assiette Végétarienne',     desc:'Légumes grillés, frites, salade fraîche',                 price:'9.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c22802bb1_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:19, name:'Assiette poulet',           desc:'Poulet grillé, frites, salade, sauce blanche',            price:'14.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66f2bd97a227d_images_small.jpeg', popular:false, active:true,  qty:0 },
+    { id:20, name:'Assiette agneau',           desc:'Brochettes d\'agneau, frites, crudités, sauce',           price:'16.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66f2bd5aed6f3_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:21, name:'Assiette Royale',           desc:'Mix viandes grillées, frites XXL, salade complète',       price:'17.00', img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c22d699ca_images_small.webp',  popular:true,  active:true,  qty:0 },
   ],
-  brochettes: [
-    { id:7, name:'Brochette Agneau',   desc:'3 brochettes d\'agneau grillées, pain, salade', price:'13.90', emoji:'🍢', popular:false, active:true  },
-    { id:8, name:'Brochette Poulet',   desc:'3 brochettes de poulet mariné, sauce blanche', price:'12.50', emoji:'🍢', popular:false, active:true  },
+  barquettes: [
+    { id:22, name:'Petite barquette frites',   desc:'Frites fraîches croustillantes — petite taille',          price:'3.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2d25b1f7_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:23, name:'Grande barquette frites',   desc:'Frites fraîches croustillantes — grande taille',          price:'4.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2dabb504_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:24, name:'Barquette de kebab',        desc:'Viande kebab en barquette, sauce au choix',               price:'6.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2e2c7714_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:25, name:'Barquette de poulet',       desc:'Poulet grillé en barquette, sauce au choix',              price:'7.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2e6d2f91_images_small.webp',  popular:false, active:true,  qty:0 },
+  ],
+  supplements: [
+    { id:26, name:'Supplément œuf',            desc:'Œuf frit ajouté à votre plat',                            price:'1.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c257ca606_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:27, name:'Supplément fromage',        desc:'Fromage fondu ajouté à votre plat',                       price:'0.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c25d892e5_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:28, name:'Supplément fromage turc',   desc:'Beyaz peynir (fromage turc) ajouté à votre plat',         price:'1.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2612a0b1_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:29, name:'Pot de sauce',              desc:'Sauce blanche, piquante ou harissa',                      price:'0.30',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2be2b7eb_images_small.webp',  popular:false, active:true,  qty:0 },
   ],
   boissons: [
-    { id:9,  name:'Coca-Cola 33cl',    desc:'Canette fraîche', price:'2.50',  emoji:'🥤', popular:false, active:true  },
-    { id:10, name:'Eau Minérale',      desc:'Bouteille 50cl', price:'1.50',  emoji:'💧', popular:false, active:true  },
-    { id:11, name:'Jus d\'orange',     desc:'Bouteille 33cl', price:'2.90',  emoji:'🍊', popular:false, active:true  },
+    { id:30, name:'Boisson 50cl',              desc:'Coca-Cola, Fanta, Sprite — canette fraîche',              price:'2.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3d709abab7_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:31, name:'Eau 50cl',                  desc:'Eau minérale fraîche',                                    price:'2.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3d70dd9943_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:32, name:'Redbull 25cl',              desc:'Boisson énergisante Red Bull',                            price:'3.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3d72309642_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:33, name:'Ayran 25cl',               desc:'Boisson lactée turque salée traditionnelle',               price:'2.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3d73595ec4_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:34, name:'Café',                      desc:'Café chaud servi en fin de repas',                        price:'1.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3d7391e749_images_small.webp',  popular:false, active:true,  qty:0 },
   ],
-  extras: [
-    { id:12, name:'Portion de Frites', desc:'Frites fraîches croustillantes', price:'3.50',  emoji:'🍟', popular:false, active:true  },
-    { id:13, name:'Supplément sauce',  desc:'Sauce blanche, piquante ou harissa', price:'0.50',  emoji:'🫙', popular:false, active:false },
+  enfant_desserts: [
+    { id:35, name:'Menu enfant',               desc:'Petit kebab ou burger + frites + boisson',                price:'8.00',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2efbf8fe_images_small.webp',  popular:false, active:true,  qty:0 },
+    { id:36, name:'Tiramisu',                  desc:'Dessert tiramisu maison',                                 price:'3.50',  img:BASE+'/uploads/media/images/cms/medias/thumb_/cms/medias/66b3c2f39fd75_images_small.webp',  popular:false, active:true,  qty:0 },
   ],
 };
-const menuCatLabels = { kebabs:'Kebabs', durums:'Durums', brochettes:'Brochettes', boissons:'Boissons', extras:'Extras' };
+const menuCatLabels = { plats:'Plats', assiettes:'Assiettes', barquettes:'Barquettes', supplements:'Suppléments', boissons:'Boissons', enfant_desserts:'Enfant & Desserts' };
 let activeMenuCat = 'kebabs';
 
 function renderMenuTabs() {
@@ -1145,10 +1203,12 @@ function switchMenuCat(cat) { activeMenuCat = cat; renderMenuTabs(); renderMenuG
 function renderMenuGrid() {
   const items = menuData[activeMenuCat] || [];
   document.getElementById('menu-grid').innerHTML = items.map(item => `
-    <div class="menu-card">
+    <div class="menu-card${item.active ? '' : ' menu-inactive'}">
       <div class="menu-card-img">
-        ${item.emoji}
+        <img src="${item.img}" alt="${item.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:2.5rem">🍽️</span>
         ${item.popular ? '<span class="popular-badge">⭐ Top</span>' : ''}
+        ${!item.active ? '<span class="unavailable-badge">Indisponible</span>' : ''}
       </div>
       <div class="menu-card-body">
         <div class="menu-card-name">${item.name}</div>
@@ -1157,9 +1217,26 @@ function renderMenuGrid() {
           <span class="menu-price">${item.price}€</span>
           <div class="menu-toggle${item.active?' on':''}" onclick="toggleMenu(${item.id})" title="${item.active?'Disponible':'Indisponible'}"></div>
         </div>
+        <div class="qty-row">
+          <span class="qty-label">Qté vendue :</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-val" id="qty-${item.id}">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
       </div>
     </div>
   `).join('');
+}
+function changeQty(id, delta) {
+  for (const cat of Object.values(menuData)) {
+    const item = cat.find(x => x.id === id);
+    if (item) {
+      item.qty = Math.max(0, item.qty + delta);
+      const el = document.getElementById('qty-' + id);
+      if (el) el.textContent = item.qty;
+      break;
+    }
+  }
 }
 function toggleMenu(id) {
   for (const cat of Object.values(menuData)) {
