@@ -657,41 +657,73 @@
 
     <!-- ══ DASHBOARD PAGE ══════════════════════════════════════════ -->
     <div class="page active" id="page-dashboard">
-      <div class="stats-grid">
+
+      <!-- ROW 1 : 4 stat cards commandes -->
+      <div class="stats-grid" style="margin-bottom:16px">
         <div class="stat-card red">
-          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
-          <div class="stat-label">Commandes aujourd'hui</div>
+          <div class="stat-icon" style="background:var(--red);opacity:1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+          <div class="stat-label">Commandes du soir</div>
           <div class="stat-value" id="stat-total">0</div>
-          <div class="stat-sub"><span class="up">↑ En direct</span> depuis Google Sheet</div>
+          <div class="stat-sub"><span class="up">↑ Live</span> Google Sheet</div>
         </div>
         <div class="stat-card orange">
-          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
-          <div class="stat-label">En cours</div>
+          <div class="stat-icon" style="background:var(--orange);opacity:1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+          <div class="stat-label">En préparation</div>
           <div class="stat-value" id="stat-encours">0</div>
-          <div class="stat-sub">En préparation cuisine</div>
+          <div class="stat-sub">En cuisine</div>
         </div>
         <div class="stat-card teal">
-          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+          <div class="stat-icon" style="background:var(--teal);opacity:1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
           <div class="stat-label">Prêts</div>
           <div class="stat-value" id="stat-pret">0</div>
-          <div class="stat-sub">En attente client</div>
+          <div class="stat-sub">Attente client</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+          <div class="stat-icon" style="background:var(--green);opacity:1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-9 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm10-9l1.96 2.5H17V9.5h4zm-2 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
           <div class="stat-label">Livrés / Servis</div>
           <div class="stat-value" id="stat-livre">0</div>
-          <div class="stat-sub">Completés ce soir</div>
+          <div class="stat-sub">Complétés</div>
         </div>
       </div>
 
-      <div class="dash-row three">
-        <!-- Recent orders -->
+      <!-- ROW 2 : stock + menu mini KPIs -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div class="card" style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;background:rgba(245,158,11,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">📦</div>
+          <div>
+            <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Valeur stock</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700" id="dash-stock-val">—</div>
+            <div style="font-size:0.7rem;color:var(--muted)" id="dash-stock-alert"></div>
+          </div>
+        </div>
+        <div class="card" style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;background:rgba(232,18,18,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">⚠️</div>
+          <div>
+            <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Alertes stock</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700" id="dash-alerts-count">—</div>
+            <div style="font-size:0.7rem;color:var(--muted)" id="dash-dlc-count"></div>
+          </div>
+        </div>
+        <div class="card" style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;background:rgba(20,184,166,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🍽️</div>
+          <div>
+            <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Menu actif</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700" id="dash-menu-count">—</div>
+            <div style="font-size:0.7rem;color:var(--muted)" id="dash-menu-sub"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3 : commandes récentes + top articles -->
+      <div class="dash-row three" style="margin-bottom:20px">
         <div class="card">
-          <div class="card-title">Commandes récentes</div>
-          <div class="card-sub">Dernières commandes reçues depuis le sheet</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-title">Commandes récentes</div>
+            <span onclick="showPage2('orders')" style="font-size:0.72rem;color:var(--red);cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:1px">Voir tout →</span>
+          </div>
+          <div class="card-sub">Depuis Google Sheet · synchro 15s</div>
           <div id="recent-orders-list"></div>
         </div>
-        <!-- Trending items -->
         <div class="card">
           <div class="card-title">Top Articles</div>
           <div class="card-sub">Les plus commandés ce soir</div>
@@ -699,20 +731,54 @@
         </div>
       </div>
 
-      <div class="dash-row">
-        <!-- Bar chart -->
+      <!-- ROW 4 : bar chart + donut type + alertes stock -->
+      <div style="display:grid;grid-template-columns:1.4fr 0.6fr 1fr;gap:16px">
         <div class="card">
-          <div class="card-title">Volume commandes (7 derniers jours)</div>
-          <div class="card-sub">Simulation — activez la connexion historique</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-title">Volume commandes — 7 jours</div>
+          </div>
+          <div class="card-sub" style="margin-bottom:10px">Simulation historique</div>
           <div class="bar-chart" id="bar-chart"></div>
         </div>
-        <!-- Stock alerts -->
+
+        <!-- Donut Sur place vs Livraison -->
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div class="card-title" style="margin-bottom:4px;text-align:center">Type de commande</div>
+          <div class="card-sub" style="margin-bottom:16px;text-align:center">Ce soir</div>
+          <svg viewBox="0 0 80 80" width="80" height="80" id="donut-svg" style="margin-bottom:12px">
+            <circle cx="40" cy="40" r="28" fill="none" stroke="var(--border)" stroke-width="14"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="var(--red)" stroke-width="14"
+              stroke-dasharray="0 176" stroke-dashoffset="44" id="donut-lv"
+              style="transition:stroke-dasharray 0.6s ease;transform:rotate(-90deg);transform-origin:center"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="var(--blue)" stroke-width="14"
+              stroke-dasharray="0 176" stroke-dashoffset="44" id="donut-sp"
+              style="transition:stroke-dasharray 0.6s ease;transform:rotate(-90deg);transform-origin:center"/>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:6px;width:100%">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem">
+              <span style="width:10px;height:10px;border-radius:2px;background:var(--blue);flex-shrink:0"></span>
+              <span style="flex:1">Sur Place</span>
+              <span style="font-family:'Oswald',sans-serif;font-weight:700" id="pct-sp">0%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem">
+              <span style="width:10px;height:10px;border-radius:2px;background:var(--red);flex-shrink:0"></span>
+              <span style="flex:1">Livraison</span>
+              <span style="font-family:'Oswald',sans-serif;font-weight:700" id="pct-lv">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertes stock -->
         <div class="card">
-          <div class="card-title">Alertes Stock</div>
-          <div class="card-sub">Articles en rupture ou stock bas</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-title">Alertes Stock</div>
+            <span onclick="showPage2('stock')" style="font-size:0.72rem;color:var(--red);cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:1px">Gérer →</span>
+          </div>
+          <div class="card-sub">DLC proches &amp; stocks bas</div>
           <div id="stock-alerts-list"></div>
         </div>
       </div>
+
     </div>
 
     <!-- ══ ORDERS PAGE ════════════════════════════════════════════ -->
@@ -1074,20 +1140,51 @@ function moveOrder(id, s) {
 // ═══════════════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════════════
+function showPage2(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const PAGE_TITLES = { dashboard:'Dashboard', orders:'Commandes', stock:'Gestion Stock', menu:'Menu' };
+  document.getElementById('page-title').textContent = PAGE_TITLES[id]||id;
+  if (id==='stock') { renderStockTabs(); renderStock(); renderMvtList(); }
+  if (id==='menu')  { renderMenuTabs(); renderMenuGrid(); }
+}
+
 function renderDashboard() {
-  const all = Object.values(orders);
+  const all     = Object.values(orders);
   const encours = all.filter(o=>o.status==='encours').length;
   const pret    = all.filter(o=>o.status==='pret').length;
   const livre   = all.filter(o=>o.status==='livre').length;
+
+  // Stat cards
   document.getElementById('stat-total').textContent   = all.length;
   document.getElementById('stat-encours').textContent = encours;
   document.getElementById('stat-pret').textContent    = pret;
   document.getElementById('stat-livre').textContent   = livre;
 
+  // Mini KPIs stock + menu
+  const stockVal   = stockItems.reduce((a,s)=>a+s.qty*s.prixU,0);
+  const stockAlert = stockItems.filter(s=>s.qty<=s.alert).length;
+  const dlcAlert   = stockItems.filter(s=>{ if(!s.dlc)return false; return Math.floor((new Date(s.dlc)-today)/86400000)<=2; }).length;
+  const totalMenu  = Object.values(menuData).flat().length;
+  const activeMenu = Object.values(menuData).flat().filter(x=>x.active).length;
+  const sv = document.getElementById('dash-stock-val');
+  const sa = document.getElementById('dash-stock-alert');
+  const ac = document.getElementById('dash-alerts-count');
+  const dc = document.getElementById('dash-dlc-count');
+  const mc = document.getElementById('dash-menu-count');
+  const ms = document.getElementById('dash-menu-sub');
+  if(sv) sv.textContent = stockVal.toFixed(0)+'€';
+  if(sa) { sa.textContent = stockAlert>0 ? stockAlert+' article'+(stockAlert>1?'s':'')+' en alerte' : '✓ Stocks OK'; sa.style.color = stockAlert>0?'var(--orange)':'var(--green)'; }
+  if(ac) { ac.textContent = stockAlert; ac.style.color = stockAlert>0?'var(--red)':'var(--green)'; }
+  if(dc) { dc.textContent = dlcAlert>0 ? dlcAlert+' DLC ≤ 2 jours' : '✓ Aucune DLC urgente'; dc.style.color = dlcAlert>0?'var(--orange)':'var(--green)'; }
+  if(mc) mc.textContent = activeMenu+' / '+totalMenu;
+  if(ms) { const off=totalMenu-activeMenu; ms.textContent = off>0?off+' article'+(off>1?'s':'')+' désactivé'+(off>1?'s':''):'Tous disponibles'; ms.style.color=off>0?'var(--orange)':'var(--green)'; }
+  document.getElementById('nav-badge-stock').style.display = stockAlert>0?'inline-flex':'none';
+
   // Recent orders
-  const recentEl = document.getElementById('recent-orders-list');
   const recent = all.slice(-6).reverse();
-  recentEl.innerHTML = recent.length ? recent.map(o => {
+  document.getElementById('recent-orders-list').innerHTML = recent.length ? recent.map(o => {
     const sc = {encours:'s-encours',pret:'s-pret',livre:'s-livre'}[o.status];
     const sl = {encours:'En cours',pret:'Prêt',livre:'Livré'}[o.status];
     const tc = o.type==='livraison'?'tag-lv':'tag-sp';
@@ -1099,47 +1196,74 @@ function renderDashboard() {
       <span class="order-type-tag ${tc}">${tl}</span>
       <span class="status-pill ${sc}">${sl}</span>
     </div>`;
-  }).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">Aucune commande</p>';
+  }).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">En attente de commandes...</p>';
 
-  // Trending items — count occurrences in items text
+  // Trending — match avec le vrai menu
   const freq = {};
   all.forEach(o => {
     o.items.toLowerCase().split(/[,\n]/).forEach(part => {
-      const p = part.replace(/\d+x?\s*/,'').trim();
+      const p = part.replace(/^\s*\d+[x×]?\s*/,'').trim();
       if (p.length > 2) freq[p] = (freq[p]||0) + 1;
     });
   });
   const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const emojis = ['🥙','🍟','🥤','🫓','🥗'];
-  document.getElementById('trending-list').innerHTML = sorted.length ? sorted.map(([name,cnt],i) =>
-    `<div class="trending-item">
+  const allMenuItems = Object.values(menuData).flat();
+  document.getElementById('trending-list').innerHTML = sorted.length ? sorted.map(([name,cnt],i) => {
+    const match = allMenuItems.find(m => m.name.toLowerCase().includes(name) || name.includes(m.name.toLowerCase().split(' ')[0]));
+    const imgEl = match ? `<img src="${match.img}" style="width:38px;height:38px;border-radius:7px;object-fit:cover" onerror="this.outerHTML='🍽️'">` : `<span style="font-size:1.3rem">🥙</span>`;
+    return `<div class="trending-item">
       <span class="trending-rank">${i+1}</span>
-      <span class="trending-img">${emojis[i]||'🍽️'}</span>
-      <div class="trending-info"><div class="trending-name">${name}</div></div>
+      <span class="trending-img">${imgEl}</span>
+      <div class="trending-info">
+        <div class="trending-name">${name}</div>
+        ${match?`<div style="font-size:0.68rem;color:var(--red);font-family:'Oswald',sans-serif">${match.price}€</div>`:''}
+      </div>
       <span class="trending-orders">${cnt}x</span>
-    </div>`
-  ).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">Données insuffisantes</p>';
+    </div>`;
+  }).join('') : '<p style="color:var(--muted);font-size:0.82rem;padding:10px 0">En attente de commandes...</p>';
 
-  // Bar chart (mock 7 days)
-  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-  const vals = [12,18,9,22,31,45, all.length || 8];
-  const max = Math.max(...vals);
-  document.getElementById('bar-chart').innerHTML = vals.map((v,i) =>
-    `<div class="bar-wrap">
-      <div class="bar" style="height:${Math.round((v/max)*90)}px" title="${v} commandes"></div>
-      <span class="bar-label">${days[i]}</span>
-    </div>`
-  ).join('');
+  // Bar chart
+  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Auj'];
+  const vals = [12,18,9,22,31,45, all.length||8];
+  const mx = Math.max(...vals);
+  document.getElementById('bar-chart').innerHTML = vals.map((v,i) => {
+    const isToday = i===6;
+    return `<div class="bar-wrap">
+      <div class="bar" style="height:${Math.round((v/mx)*90)}px;background:${isToday?'var(--red)':'rgba(232,18,18,0.4)'}" title="${v} commandes"></div>
+      <span class="bar-label" style="${isToday?'color:var(--red)':''}">${days[i]}</span>
+    </div>`;
+  }).join('');
 
-  // Stock alerts
-  const alerts = stockItems.filter(s => s.qty <= s.alert);
-  document.getElementById('nav-badge-stock').style.display = alerts.length ? 'inline-flex' : 'none';
-  document.getElementById('stock-alerts-list').innerHTML = alerts.length ? alerts.map(s =>
-    `<div class="order-row">
-      <span class="order-client">${s.name}</span>
-      <span class="stock-alert">⚠ ${s.qty} ${s.unit} restant${s.qty>1?'s':''}</span>
-    </div>`
-  ).join('') : '<p style="color:var(--green);font-size:0.82rem;padding:10px 0">✓ Tous les stocks sont OK</p>';
+  // Donut Sur place / Livraison
+  const sp = all.filter(o=>o.type==='surplace').length;
+  const lv = all.filter(o=>o.type==='livraison').length;
+  const total = sp+lv||1;
+  const circ = 2*Math.PI*28;
+  const lvArc = (lv/total)*circ;
+  const spArc = (sp/total)*circ;
+  const donutLv = document.getElementById('donut-lv');
+  const donutSp = document.getElementById('donut-sp');
+  if(donutLv){ donutLv.setAttribute('stroke-dasharray',`${lvArc} ${circ-lvArc}`); donutLv.setAttribute('stroke-dashoffset', circ/4+''); }
+  if(donutSp){ donutSp.setAttribute('stroke-dasharray',`${spArc} ${circ-spArc}`); donutSp.setAttribute('stroke-dashoffset', (circ/4 - lvArc)+''); }
+  const psp = document.getElementById('pct-sp'); const plv = document.getElementById('pct-lv');
+  if(psp) psp.textContent = Math.round(sp/total*100)+'%';
+  if(plv) plv.textContent = Math.round(lv/total*100)+'%';
+
+  // Stock alerts détaillées
+  const alerts = stockItems.filter(s=>s.qty<=s.alert || (s.dlc && Math.floor((new Date(s.dlc)-today)/86400000)<=2));
+  document.getElementById('stock-alerts-list').innerHTML = alerts.length ? alerts.slice(0,6).map(s => {
+    const isDlc = s.dlc && Math.floor((new Date(s.dlc)-today)/86400000)<=2;
+    const isLow = s.qty<=s.alert;
+    return `<div class="order-row" style="gap:8px">
+      <span style="font-size:0.85rem">${isLow&&isDlc?'🔴':isLow?'⚠️':'📅'}</span>
+      <span class="order-client" style="font-size:0.8rem">${s.name}</span>
+      <div style="margin-left:auto;text-align:right">
+        ${isLow?`<div style="color:var(--${s.qty===0?'muted':'orange'});font-size:0.7rem;font-weight:600">${s.qty===0?'Rupture':s.qty+' '+s.unit}</div>`:''}
+        ${isDlc?`<div style="color:var(--orange);font-size:0.68rem">DLC: ${s.dlc}</div>`:''}
+      </div>
+    </div>`;
+  }).join('')+'<div style="margin-top:8px;text-align:center"><span onclick="showPage2(\'stock\')" style="font-size:0.72rem;color:var(--red);cursor:pointer;font-family:\'Oswald\',sans-serif">Voir tout →</span></div>'
+  : '<div style="padding:12px 0;text-align:center"><span style="font-size:1.5rem">✅</span><p style="color:var(--green);font-size:0.82rem;margin-top:6px">Tous les stocks sont OK</p></div>';
 }
 
 // ═══════════════════════════════════════════════════════════════
